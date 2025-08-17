@@ -46,6 +46,66 @@ ALTER USER 'sys_test'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass
 
 ### Решение
 
+```sql
+CREATE USER 'sys_temp'@'localhost' IDENTIFIED BY 'sys_temp';
+SELECT user, host FROM mysql.user;
+GRANT ALL PRIVILEGES ON *.* TO 'sys_temp'@'localhost';
+SHOW GRANTS FOR 'sys_temp'@'localhost' \G
+```
+
+![](img/img-01-01.png)
+
+![](img/img-01-02.png)
+
+```Bash
+mysql -u sys_temp -p
+```
+
+![](img/img-01-03.png)
+
+```Bash
+wget https://downloads.mysql.com/docs/sakila-db.zip
+unzip sakila-db.zip
+```
+
+![](img/img-01-04.png)
+
+Проверим, создается ли в скрипте БД
+
+```Bash
+head -30 sakila-schema.sql | grep -i "create database"
+```
+
+![](img/img-01-05.png)
+
+Пустой вывод означает, что нужно создать базу вручную.
+
+```sql
+CREATE DATABASE sakila;
+USE sakila;
+SOURCE /home/sergey/sakila-db/sakila-schema.sql
+```
+
+![](img/img-01-06.png)
+
+Или по-другому
+
+```Bash
+mysql -u sys_temp -p sakila < sakila-db/sakila-data.sql
+```
+
+![](img/img-01-07.png)
+
+```sql
+USE sakila;
+SHOW TABLES;
+SELECT * FROM actor LIMIT 5;
+```
+
+![](img/img-01-08.png)
+
+![](img/img-01-09.png)
+
 ---
 
 ### Задание 2
@@ -56,6 +116,46 @@ customer         | customer_id
 ```
 
 ### Решение
+
+```sql
+SELECT 
+    TABLE_NAME,
+    COLUMN_NAME,
+    ORDINAL_POSITION
+FROM 
+    information_schema.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_SCHEMA = 'sakila' 
+    AND CONSTRAINT_NAME = 'PRIMARY'
+ORDER BY 
+    TABLE_NAME, 
+    ORDINAL_POSITION;
+```
+
+![](img/img-02-01.png)
+
+|---------------|--------------|------------------|
+| TABLE_NAME    | COLUMN_NAME  | ORDINAL_POSITION |
+|---------------|--------------|------------------|
+| actor         | actor_id     |                1 |
+| address       | address_id   |                1 |
+| category      | category_id  |                1 |
+| city          | city_id      |                1 |
+| country       | country_id   |                1 |
+| customer      | customer_id  |                1 |
+| film          | film_id      |                1 |
+| film_actor    | actor_id     |                1 |
+| film_actor    | film_id      |                2 |
+| film_category | film_id      |                1 |
+| film_category | category_id  |                2 |
+| film_text     | film_id      |                1 |
+| inventory     | inventory_id |                1 |
+| language      | language_id  |                1 |
+| payment       | payment_id   |                1 |
+| rental        | rental_id    |                1 |
+| staff         | staff_id     |                1 |
+| store         | store_id     |                1 |
+|---------------|--------------|------------------|
 
 ---
 
@@ -70,3 +170,9 @@ customer         | customer_id
 *Результатом работы должны быть скриншоты обозначенных заданий, а также простыня со всеми запросами.*
 
 ### Решение
+
+```sql
+REVOKE INSERT, UPDATE, DELETE ON *.* FROM 'sys_temp'@'localhost';
+```
+
+![](img/img-03-01.png)
