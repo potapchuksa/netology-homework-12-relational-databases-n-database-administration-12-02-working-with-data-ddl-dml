@@ -1,0 +1,1 @@
+# netology-homework-12-relational-databases-n-database-administration-12-02-working-with-data-ddl-dml
