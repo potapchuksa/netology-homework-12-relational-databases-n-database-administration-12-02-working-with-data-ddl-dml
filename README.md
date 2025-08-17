@@ -134,7 +134,6 @@ ORDER BY
 
 ![](img/img-02-01.png)
 
-|---------------|--------------|------------------|
 | TABLE_NAME    | COLUMN_NAME  | ORDINAL_POSITION |
 |---------------|--------------|------------------|
 | actor         | actor_id     |                1 |
@@ -155,7 +154,6 @@ ORDER BY
 | rental        | rental_id    |                1 |
 | staff         | staff_id     |                1 |
 | store         | store_id     |                1 |
-|---------------|--------------|------------------|
 
 ---
 
